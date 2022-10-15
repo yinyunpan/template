@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "http://json.schemastore.org/vs-2017.3.host",
   "order": 200,
   "icon": "ide/sampletemplate.png",
@@ -11,6 +11,7 @@
       "id": "appUK",
       "isVisible": true
     },
+    //隐藏http端口，自动生成
     {
       "id": "kestrelHttpPort",
       "isVisible": false
