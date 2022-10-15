@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "yinyunpan",
+  "classifications": [ "Web", "WebApi" ],
+  "name": "项目模板案例",
+  "identity": "sample.template",
+  "shortName": "st",
+  "tags": {
+    "language": "C#",
+    //解决方案，与HostIdentifier用法生成解决方案文件名呼应
+    "type": "solution"
+  },
+  "sourceName": "sampletemplate",
+  "preferNameDirectory": false,
+  //重新生成项目guid，对应template.sln中项目guid
+  "guids": [
+    "5A6E6B9F-F8FA-4152-95B4-860F8CCAE3C3",
+    "30B12CFC-11E1-4E1C-B484-F708CEBD080A",
+    "810CD02B-0E13-4123-A84F-FBD4F4F1CD3A",
+    "3D2A540B-E773-44FA-82CF-14F3393D41B2",
+    "F4C1EFA8-824C-4985-A50D-BD1171ED1CFC",
+    "41C74675-6234-41F2-9B8A-4D06159D2A81",
+    "5EAD3BC3-554B-4058-9A9D-A91DF5F2DE1C",
+    "8A522BE9-0EE5-4C54-861B-394452A6744E",
+    "F075845E-43F4-466D-B731-904782BD9047"
+  ],
+  "symbols": {
+    /**
+    template.sln文件有用host，排除项目文件引用
+    modifiers-condition，排除文件夹+文件
+      **/
+    "host": {
+      "type": "parameter",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "web",
+          "description": "后台"
+        },
+        {
+          "choice": "webapi",
+          "description": "接口"
+        }
+      ],
+      "defaultValue": "web",
+      "description": "项目类型",
+      "displayName": "项目类型",
+      "isRequired": true
+    },
+    "web": {
+      "type": "computed",
+      "value": "(host == \"web\")"
+    },
+    "webapi": {
+      "type": "computed",
+      "value": "(host == \"webapi\")"
+    },
+    //应用的环境变量
+    "appUK": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "应用标识",
+      "displayName": "应用标识",
+      "isRequired": true,
+      "replaces": "wutong.netcore.sampletemplate"
+    },
+    "kestrelHttpPort": {
+      "type": "parameter",
+      "datatype": "integer",
+      "description": "启动配置文件的http端口",
+      "displayName": "http端口"
+    },
+    "kestrelHttpPortGenerated": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "low": 5000,
+        "high": 5300
+      }
+    },
+    "kestrelHttpPortReplacer": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "kestrelHttpPort",
+        "fallbackVariableName": "kestrelHttpPortGenerated"
+      },
+      //与launchSettings.json端口一致，才能随机生成替换
+      "replaces": "5000"
+    },
+    //模板主机标识
+    "HostIdentifier": {
+      "type": "bind",
+      "binding": "HostIdentifier"
+    }
+  },
+  "sources": [
+    {
+      "exclude": [ ".template.config/**/*", ".vs/**/*" ],
+      "modifiers": [
+        {
+          "condition": "(web)",
+          "exclude": [ "src/WebApi/**/*", "test/WebApiUnitTest/**/*" ]
+        },
+        {
+          "condition": "(webapi)",
+          "exclude": [ "src/Web/**/*", "test/WebUnitTest/**/*" ]
+        },
+        {
+          /**
+          visual studio创建模板会自动生成新的解决方案文件.sln、与模板下{sourceName}.sln冲突，导致生成visual studio提醒外部文件变化重新加载，操作不友好
+          判断使用模板主机标识：vs-visual studio、dotnetcli\dotnetcli-preview-命令窗口
+          模板下解决方案文件名要非{sourceName}.sln，命令窗口重命名
+          参考：https://github.com/sayedihashimi/template-sample/tree/main/src/Samples/06-console-csharp-fsharp
+            **/
+          "condition": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")",
+          "rename": {
+            "template.sln": "sampletemplate.sln"
+          }
+        }
+      ]
+    }
+  ]
+}

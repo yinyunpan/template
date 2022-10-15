@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<PackageType>Template</PackageType>
+		<PackageVersion>1.0.0.1</PackageVersion>
+		<PackageId>sample.template</PackageId>
+		<Title>项目模板案例</Title>
+		<Authors>flightengine</Authors>
+		<Description>项目模板案例</Description>
+		<PackageTags>dotnet-new;templates</PackageTags>
+		<TargetFramework>net6.0</TargetFramework>
+
+		<IncludeContentInPack>true</IncludeContentInPack>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<ContentTargetFolders>content</ContentTargetFolders>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!--PackagePath="content" 保持文件夹\文件的层级结构，否则所有文件都在根目录-->
+		<Content Include="..\net6.0\**\*" PackagePath="content" Exclude="..\net6.0\**\bin\**;..\net6.0\**\obj\**;..\net6.0\**\.vs\**" />
+		<Compile Remove="..\net6.0\**\*" />
+	</ItemGroup>
+</Project>
